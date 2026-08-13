@@ -1,0 +1,69 @@
+name: CI to integrate, build, test and package the application
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build-test-package:
+    name: Build, Test & Package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            10.0.x
+          cache: true
+          cache-dependency-path: '**/packages.lock.json'
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Build Application
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Run Unit Tests
+        run: dotnet test --configuration Release --no-build --logger "trx;LogFileName=test_results.trx" --verbosity normal
+
+      - name: Publish Web Application
+        run: dotnet publish src/CustomerManagementSpike.Web/CustomerManagementSpike.Web.csproj --configuration Release --output ./publish --no-build
+
+      - name: Compress Application into Zip Package
+        run: |
+          cd ./publish
+          zip -r ../CustomerManagementSpike-Web-app.zip .
+          cd ..
+          echo "Zip package created successfully:"
+          ls -lh CustomerManagementSpike-Web-app.zip
+
+      - name: Upload Application Zip Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CustomerManagementSpike-Web-app
+          path: CustomerManagementSpike-Web-app.zip
+          retention-days: 14
+          if-no-files-found: error
+
+      - name: Upload Test Results Artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: TestResults
+          path: '**/TestResults/*.trx'
+          retention-days: 7
+          if-no-files-found: ignore
