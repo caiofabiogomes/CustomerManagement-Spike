@@ -1,6 +1,6 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/CustomerManagementSpike.Tests/CustomerManagementSpike.Tests.csproj" />
     <Project Path="src/CustomerManagementSpike.Web/CustomerManagementSpike.Web.csproj" Id="0b7f8948-34ac-45c9-94fb-864cacf1d977" />
-    <Project Path="tests/CustomerManagementSpike.Tests/CustomerManagementSpike.Tests.csproj" />
   </Folder>
 </Solution>
