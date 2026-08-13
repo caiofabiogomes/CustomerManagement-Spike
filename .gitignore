@@ -427,3 +427,9 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Application Publish & CI Artifact Packages
+[Pp]ublish/
+publish/
+*.zip
+
