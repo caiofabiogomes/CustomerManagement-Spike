@@ -1,4 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -20,6 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\CustomerManagementSpike.Web\CustomerManagementSpike.Web.csproj" />
+    <ProjectReference Include="..\CustomerManagementSpike.MonitoringService\CustomerManagementSpike.MonitoringService.csproj" />
   </ItemGroup>
-
 </Project>
