@@ -1,6 +1,23 @@
 using CustomerManagementSpike.Web.Services;
+using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.DataProtection;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+var dataProtectionKeysDir = Path.Combine(builder.Environment.ContentRootPath, "App_Data", "DataProtection-Keys");
+builder.Services.AddDataProtection()
+    .SetApplicationName("CustomerManagementSpike")
+    .PersistKeysToFileSystem(new DirectoryInfo(dataProtectionKeysDir));
+
+
+builder.Services.AddAntiforgery(options =>
+{
+    options.Cookie.Name = ".CustomerManagementSpike.Antiforgery";
+    options.Cookie.Path = "/";
+    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

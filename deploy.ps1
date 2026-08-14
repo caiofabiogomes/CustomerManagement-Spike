@@ -238,6 +238,7 @@ Set-ItemProperty -Path "IIS:\AppPools\$AppPoolName" -Name "managedRuntimeVersion
 Set-ItemProperty -Path "IIS:\AppPools\$AppPoolName" -Name "processModel.identityType" -Value 3
 Set-ItemProperty -Path "IIS:\AppPools\$AppPoolName" -Name "processModel.userName" -Value $appPoolUser
 Set-ItemProperty -Path "IIS:\AppPools\$AppPoolName" -Name "processModel.password" -Value $PasswordStr
+Set-ItemProperty -Path "IIS:\AppPools\$AppPoolName" -Name "processModel.loadUserProfile" -Value "True"
 
 Write-Host "  [+] AppPool configured with 'No Managed Code' and identity '$appPoolUser'." -ForegroundColor Green
 
