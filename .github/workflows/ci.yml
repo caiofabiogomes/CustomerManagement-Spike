@@ -69,7 +69,7 @@ jobs:
       - name: Push Docker Image to Docker Hub
         if: github.event_name != 'pull_request'
         run: |
-          dicker build -t customermanagementspike-web:latest .
+          docker build -t customermanagementspike-web:latest .
           DOCKERHUB_REPO="${{ secrets.DOCKERHUB_USERNAME }}/customermanagementspike-web"
           docker tag customermanagementspike-web:latest "${DOCKERHUB_REPO}:latest"
           docker tag customermanagementspike-web:latest "${DOCKERHUB_REPO}:${{ github.sha }}"
