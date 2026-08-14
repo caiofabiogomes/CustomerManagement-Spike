@@ -59,6 +59,25 @@ jobs:
           retention-days: 14
           if-no-files-found: error
 
+      - name: Log in to Docker Hub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push Docker Image to Docker Hub
+        if: github.event_name != 'pull_request'
+        run: |
+          dicker build -t customermanagementspike-web:latest .
+          DOCKERHUB_REPO="${{ secrets.DOCKERHUB_USERNAME }}/customermanagementspike-web"
+          docker tag customermanagementspike-web:latest "${DOCKERHUB_REPO}:latest"
+          docker tag customermanagementspike-web:latest "${DOCKERHUB_REPO}:${{ github.sha }}"
+          echo "Pushing images to Docker Hub repository: ${DOCKERHUB_REPO}"
+          docker push "${DOCKERHUB_REPO}:latest"
+          docker push "${DOCKERHUB_REPO}:${{ github.sha }}"
+          echo "Successfully pushed Docker images to Docker Hub!"
+
       - name: Upload Test Results Artifact
         uses: actions/upload-artifact@v4
         if: always()
