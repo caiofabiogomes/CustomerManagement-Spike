@@ -1,0 +1,14 @@
+services:
+  web:
+    image: caiofabiogomes/customermanagementspike-web:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: customer-management-web
+    ports:
+      - "${HOST_PORT:-8080}:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ENVIRONMENT:-Production}
+      - ASPNETCORE_HTTP_PORTS=8080
+    restart: unless-stopped
+
