@@ -48,8 +48,6 @@
 
 - **Web Application (`CustomerManagementSpike.Web`)**:
   - ASP.NET Core 10 MVC with clean Controller-View-Model separation.
-  - Full CRUD operations with client and server-side data validation.
-  - Thread-safe in-memory data store (`ConcurrentDictionary`).
   - Persistent Data Protection keys in `App_Data` to preserve session and anti-forgery tokens across IIS worker process recycles.
 - **SRE Health Monitoring Worker (`CustomerManagementSpike.MonitoringService`)**:
   - Built with .NET Worker Service and `Microsoft.Extensions.Hosting.WindowsServices`.
@@ -119,26 +117,10 @@ CustomerManagement-Spike/
 
 ---
 
-## 🚀 Quick Start (5-Minute Run)
+## 🚀 Quick Start 
 
-### Option 1: Run Locally (Fastest)
 
-```powershell
-# 1. Clone repository & navigate to folder
-git clone https://github.com/caiofabiogomes/CustomerManagement-Spike.git
-cd CustomerManagement-Spike
-
-# 2. Run unit tests
-dotnet test
-
-# 3. Launch Web Application
-dotnet run --project src/CustomerManagementSpike.Web/CustomerManagementSpike.Web.csproj
-```
-👉 Open your browser at **`http://localhost:5000`** (or the URL displayed in the console).
-
----
-
-### Option 2: Run with Docker
+### Option 1: Run with Docker
 
 ```powershell
 # Launch containerized application on Port 8080
@@ -148,7 +130,7 @@ dotnet run --project src/CustomerManagementSpike.Web/CustomerManagementSpike.Web
 
 ---
 
-### Option 3: Deploy to Full IIS & Windows Monitoring Service
+### Option 2: Deploy to Full IIS & Windows Monitoring Service
 
 ```powershell
 # Open PowerShell as Administrator
