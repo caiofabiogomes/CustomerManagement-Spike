@@ -9,25 +9,7 @@
 
 ---
 
-## 📑 Table of Contents
 
-- [Overview & System Architecture](#-overview--system-architecture)
-- [Key Features](#-key-features)
-- [Repository Structure](#-repository-structure)
-- [Prerequisites & System Requirements](#-prerequisites--system-requirements)
-- [🚀 Quick Start (5-Minute Run)](#-quick-start-5-minute-run)
-- [Detailed Deployment Guides](#-detailed-deployment-guides)
-  - [1. Local Development & Testing](#1-local-development--testing)
-  - [2. Automated IIS Web Hosting (`deploy.ps1`)](#2-automated-iis-web-hosting-deployps1)
-  - [3. Windows Monitoring Service (`deploy-service.ps1` / `install-service.ps1`)](#3-windows-monitoring-service-deploy-serviceps1--install-serviceps1)
-  - [4. Docker & Containerized Hosting (`deploy-docker.ps1`)](#4-docker--containerized-hosting-deploy-dockerps1)
-- [CI/CD Pipeline (GitHub Actions)](#-cicd-pipeline-github-actions)
-- [Script Parameters Reference](#-script-parameters-reference)
-- [Verification & Reliability Testing (300s Auto-Recovery)](#-verification--reliability-testing-300s-auto-recovery)
-- [Troubleshooting Runbook](#-troubleshooting-runbook)
-- [Further Documentation](#-further-documentation)
-
----
 
 ## 🏗️ Overview & System Architecture
 
