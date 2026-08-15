@@ -1,0 +1,16 @@
+**/.git
+**/.github
+**/.vs
+**/.vscode
+**/bin
+**/obj
+**/publish
+**/*.user
+**/*.suo
+**/*.trx
+**/*.log
+**/*.zip
+**/*.tar
+**/*.tar.gz
+README.md
+*.ps1
