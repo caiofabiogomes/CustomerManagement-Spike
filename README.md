@@ -148,108 +148,6 @@ CustomerManagement-Spike/
 
 ---
 
-## 📖 Detailed Deployment Guides
-
-### 1. Local Development & Testing
-
-#### Building the Solution
-```powershell
-dotnet restore
-dotnet build --configuration Release
-```
-
-#### Running the Test Suite
-```powershell
-dotnet test --configuration Release --verbosity normal
-```
-
-#### Running the Monitoring Service in Console Mode
-```powershell
-dotnet run --project src/CustomerManagementSpike.MonitoringService/CustomerManagementSpike.MonitoringService.csproj
-```
-
----
-
-### 2. Automated IIS Web Hosting (`deploy.ps1`)
-
-The [`deploy.ps1`](file:///C:/Users/caiof/source/repos/CustomerManagement-Spike/deploy.ps1) script provides completely unattended provisioning of IIS:
-
-```powershell
-# Run with default settings (Administrator PowerShell required)
-.\deploy.ps1
-```
-
-#### What `deploy.ps1` does automatically:
-1. **Validates Admin Rights**: Ensures execution under Administrator privileges.
-2. **Installs Required IIS Features**: Installs `IIS-WebServerRole`, `IIS-DefaultDocument`, `IIS-HttpLogging`, and PowerShell `WebAdministration` tools if missing.
-3. **Creates Dedicated User & Group**: Provisions local user `SpikeIISUser` and local group `SpikeIISGroup`.
-4. **Compiles & Stages Binaries**: Publishes the Release build to `C:\inetpub\wwwroot\CustomerSpike\App` and configures `...\Root` default page.
-5. **Configures NTFS Permissions**: Grants explicit Full Control rights to `SpikeIISUser`.
-6. **Creates & Configures AppPool**: Sets `CustomerSpikeAppPool` to `No Managed Code` (ANCM Out-of-Process / In-Process) running under `.\SpikeIISUser`.
-7. **Sets up IIS Website & Bindings**: Configures Port 80 (HTTP) and generates a self-signed localhost SSL certificate bound to Port 443 (HTTPS).
-8. **Maps Child Application**: Binds `/app` to the compiled web application.
-
----
-
-### 3. Windows Monitoring Service (`deploy-service.ps1` / `install-service.ps1`)
-
-The [`install-service.ps1`](file:///C:/Users/caiof/source/repos/CustomerManagement-Spike/install-service.ps1) / [`deploy-service.ps1`](file:///C:/Users/caiof/source/repos/CustomerManagement-Spike/deploy-service.ps1) script configures the SRE background health monitor:
-
-```powershell
-# Run with default settings (Administrator PowerShell required)
-.\install-service.ps1
-```
-
-#### What it does automatically:
-1. **Grants `SeServiceLogonRight`**: Uses Windows Win32 LSA API to grant "Log on as a service" privilege to `SpikeIISUser`.
-2. **Publishes Service Binaries**: Compiles `CustomerManagementSpike.MonitoringService` to `C:\Services\CustomerSpikeIisMonitor`.
-3. **Registers Windows Service**: Creates `CustomerSpikeIisMonitor` in Windows SCM set to Automatic startup (`start= auto`).
-4. **Configures SCM Auto-Recovery**: Sets failure action to restart the service after **300,000 ms (300 seconds / 5 minutes)** for all failure attempts:
-   ```powershell
-   sc.exe failure "CustomerSpikeIisMonitor" reset= 86400 actions= restart/300000/restart/300000/restart/300000
-   ```
-5. **Starts the Service**: Verifies startup and checks initial log entry creation.
-
-#### Useful Service Management Commands:
-```powershell
-# Check service status
-Get-Service -Name "CustomerSpikeIisMonitor"
-
-# Tail live monitor logs
-Get-Content -Path "C:\Services\CustomerSpikeIisMonitor\iis_monitor.log" -Wait -Tail 20
-
-# Inspect SCM auto-recovery configuration
-sc.exe qfailure "CustomerSpikeIisMonitor"
-
-# Stop / Start service manually
-Stop-Service -Name "CustomerSpikeIisMonitor"
-Start-Service -Name "CustomerSpikeIisMonitor"
-```
-
----
-
-### 4. Docker & Containerized Hosting (`deploy-docker.ps1`)
-
-Run the application inside a hardened Linux container:
-
-```powershell
-# Build and run container
-.\deploy-docker.ps1 -Build
-
-# Run on a custom host port (e.g. 9000)
-.\deploy-docker.ps1 -HostPort 9000 -Environment "Production" -Build
-```
-
-Or using native Docker commands:
-```powershell
-# Build image
-docker build -t customer-management-web .
-
-# Run container
-docker run -d -p 8080:8080 --name customer-management-web customer-management-web
-```
-
----
 
 ## 🔄 CI/CD Pipeline (GitHub Actions)
 
@@ -284,7 +182,7 @@ The workflow defined in [`.github/workflows/ci.yml`](file:///C:/Users/caiof/sour
 | `-CertFriendlyName` | String | `CustomerSpike-IIS-Cert` | Friendly name for generated self-signed SSL cert |
 | `-SkipPublish` | Switch | `False` | Skips dotnet compilation if binaries already exist |
 
-### `deploy-service.ps1` / `install-service.ps1` (Monitoring Service)
+### `install-service.ps1` (Monitoring Service)
 
 | Parameter | Type | Default Value | Description |
 | :--- | :--- | :--- | :--- |
